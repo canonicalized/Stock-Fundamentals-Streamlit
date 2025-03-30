@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import time
 import gspread
-# from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2 import service_account
 import streamlit as st
 import json
@@ -46,11 +45,8 @@ def scrape_finviz_fundamentals(tickers):
     return pd.DataFrame(results)
 
 def get_google_client():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    # service_account_info = json.loads(st.secrets["SERVICE_ACCOUNT_KEY"])
-    # creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
-    
-    creds = service_account.Credentials.from_service_account_info(st.secrets["GCP_SERVICE_ACCOUNT"])
+    scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+    creds = service_account.Credentials.from_service_account_info(st.secrets["GCP_SERVICE_ACCOUNT"], scopes=scope)
     return gspread.authorize(creds)
 
 def get_tickers_from_google_sheet():
